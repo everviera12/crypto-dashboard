@@ -1,6 +1,6 @@
 import type { CoinType } from "../types/coins.types";
 
-export const fetchCoins = async () => {
+export const fetchCoins = async (): Promise<CoinType[]> => {
 
     const publicKey = import.meta.env.VITE_COINGECKO_PUBLIC_KEY;
 
@@ -25,5 +25,6 @@ export const fetchCoins = async () => {
 
     } catch (error) {
         console.error("Error parsing response data", error);
+        return [];
     }
 }
