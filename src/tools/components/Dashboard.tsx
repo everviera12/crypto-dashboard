@@ -33,9 +33,15 @@ export function Dashboard({ chartData }: { chartData: CoinPriceHistoryType }) {
     );
 
     console.log(labels);
-    
+
 
     const prices = chartData.prices.map(([_, price]) => price);
+
+    const isPriceUp = prices[prices.length - 1] >= prices[0];
+    const lineColor = isPriceUp ? '#22c55e' : '#ef4444'; // verde o rojo
+    const backgroundColor = isPriceUp
+        ? 'rgba(34, 197, 94, 0.2)'
+        : 'rgba(239, 68, 68, 0.2)';
 
     const options = {
         responsive: true,
@@ -60,8 +66,8 @@ export function Dashboard({ chartData }: { chartData: CoinPriceHistoryType }) {
             {
                 label: `Price (USD) of ${labels.length} days`,
                 data: prices,
-                borderColor: 'rgb(53, 162, 235)',
-                backgroundColor: 'rgba(53, 162, 235, 0.5)',
+                borderColor: lineColor,
+                backgroundColor: backgroundColor,
                 fill: true,
             },
         ],

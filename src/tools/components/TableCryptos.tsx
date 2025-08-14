@@ -49,7 +49,7 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
             >
                 {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
             </IconButton>
-            
+
             <IconButton
                 onClick={handleBackButtonClick}
                 disabled={page === 0}
@@ -57,7 +57,7 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
             >
                 {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
             </IconButton>
-            
+
             <IconButton
                 onClick={handleNextButtonClick}
                 disabled={page >= Math.ceil(count / rowsPerPage) - 1}
@@ -126,7 +126,7 @@ export default function TableCryptos({ coins }: { coins: CoinType[] }) {
                                 style={{ color: coin.market_cap_change_24h >= 0 ? 'green' : 'red' }}
                             >
                                 {coin.market_cap_change_24h >= 0 ? '+' : ''}
-                                {coin.market_cap_change_24h.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                {coin.market_cap_change_24h.toFixed(2)}%
                             </TableCell>
                         </TableRow>
 
