@@ -1,77 +1,79 @@
-import type { CoinType } from "../types/coins.types";
 import {
     Chart as ChartJS,
-    LineElement,
-    PointElement,
-    LinearScale,
     CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
     Tooltip,
-    Filler
-} from "chart.js";
-import { Line } from "react-chartjs-2";
-ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Tooltip, Filler);
+    Legend,
+    Filler,
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
+import type { CoinPriceHistoryType } from '../types/coins.types';
+import Loader from './Loader';
 
-type DashboardProps = {
-    selectedCoin: CoinType;
-    labels: string[];
-    prices: number[];
-};
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Filler,
+    Legend
+);
+export function Dashboard({ chartData }: { chartData: CoinPriceHistoryType }) {
 
-export default function Dashboard({ selectedCoin, labels, prices }: DashboardProps) {
+    if (!chartData) return <Loader />;
+    if (!chartData.prices || chartData.prices.length === 0) return <p>No data available</p>;
+
+    const labels = chartData.prices.map(([timestamp]) =>
+        new Date(timestamp).toLocaleDateString("en-US", { month: "short", day: "numeric" })
+    );
+
+    console.log(labels);
+
+
+    const prices = chartData.prices.map(([_, price]) => price);
+
+    const isPriceUp = prices[prices.length - 1] >= prices[0];
+    const lineColor = isPriceUp ? '#22c55e' : '#ef4444'; // verde o rojo
+    const backgroundColor = isPriceUp
+        ? 'rgba(34, 197, 94, 0.2)'
+        : 'rgba(239, 68, 68, 0.2)';
+
+    const options = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top' as const,
+            },
+            tooltip: {
+                mode: "index" as const,
+                intersect: false,
+            },
+            title: {
+                display: true,
+                text: 'Crypto Dashboard' as string,
+            },
+        },
+    };
+
+    const data = {
+        labels,
+        datasets: [
+            {
+                label: `Price (USD) of ${labels.length} days`,
+                data: prices,
+                borderColor: lineColor,
+                backgroundColor: backgroundColor,
+                fill: true,
+            },
+        ],
+    };
 
     return (
-        <div className="mt-8 rounded-2xl bg-gradient-to-br from-white to-gray-50 shadow-lg p-6 border border-gray-200">
-            <img src={selectedCoin.image} alt={'Cryoto logo'} className="rounded-full size-6" />
-
-            <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                7-Day Price Trend – {selectedCoin.name}
-            </h2>
-            <Line
-                data={{
-                    labels,
-                    datasets: [
-                        {
-                            label: "USD Price",
-                            data: prices,
-                            fill: true,
-                            backgroundColor:
-                                selectedCoin.price_change_percentage_24h >= 0
-                                    ? "rgba(34,197,94,0.1)"
-                                    : "rgba(239,68,68,0.1)",
-                            borderColor:
-                                selectedCoin.price_change_percentage_24h >= 0
-                                    ? "#22c55e"
-                                    : "#ef4444",
-                            pointRadius: 3,
-                            pointBackgroundColor:
-                                selectedCoin.price_change_percentage_24h >= 0
-                                    ? "#22c55e"
-                                    : "#ef4444",
-                            tension: 0.4,
-                        },
-                    ],
-                }}
-                options={{
-                    responsive: true,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            mode: "index",
-                            intersect: false,
-                        },
-                    },
-                    scales: {
-                        x: {
-                            ticks: { color: "#4B5563" },
-                            grid: { display: false },
-                        },
-                        y: {
-                            ticks: { color: "#4B5563" },
-                            grid: { color: "#E5E7EB" },
-                        },
-                    },
-                }}
-            />
-        </div>
+        <Line options={options} data={data} />
     );
 }

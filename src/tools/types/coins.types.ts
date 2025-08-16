@@ -26,3 +26,7 @@ export type CoinType = {
     roi: any
     last_updated: string
 }
+
+export type CoinPriceHistoryType = {
+    prices: [number, number][]
+}
