@@ -17,6 +17,7 @@
     --animate-rotate: rotation 1s linear infinite;
 
     @keyframes float {
+
         0%,
         100% {
             transform: translateY(0);
@@ -28,6 +29,7 @@
     }
 
     @keyframes hover {
+
         0%,
         100% {
             transform: translateX(0);
@@ -47,5 +49,17 @@
         100% {
             transform: rotate(360deg);
         }
+    }
+}
+
+.loader {
+    background:
+        linear-gradient(orange 0 0) 0/0% no-repeat lightblue;
+    animation: progress 3s infinite steps(10);
+}
+
+@keyframes progress {
+    100% {
+        background-size: 110%
     }
 }
