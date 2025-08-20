@@ -123,10 +123,10 @@ export default function TableCryptos({ coins }: { coins: CoinType[] }) {
                             <TableCell align="right">${coin.ath.toLocaleString()}</TableCell>
                             <TableCell
                                 align="right"
-                                style={{ color: coin.market_cap_change_24h >= 0 ? 'green' : 'red' }}
+                                style={{ color: coin.market_cap_change_percentage_24h >= 0 ? 'green' : 'red' }}
                             >
-                                {coin.market_cap_change_24h >= 0 ? '+' : ''}
-                                {coin.market_cap_change_24h.toFixed(2)}%
+                                {coin.market_cap_change_percentage_24h >= 0 ? '+' : ''}
+                                {coin.market_cap_change_percentage_24h.toFixed(2)}%
                             </TableCell>
                         </TableRow>
 

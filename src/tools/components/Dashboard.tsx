@@ -23,7 +23,7 @@ ChartJS.register(
     Filler,
     Legend
 );
-export function Dashboard({ chartData }: { chartData: CoinPriceHistoryType }) {
+export function Dashboard({ chartData, isPricePositive }: { chartData: CoinPriceHistoryType, isPricePositive: boolean }) {
 
     if (!chartData) return <Loader />;
     if (!chartData.prices || chartData.prices.length === 0) return <p>No data available</p>;
@@ -36,10 +36,11 @@ export function Dashboard({ chartData }: { chartData: CoinPriceHistoryType }) {
 
 
     const prices = chartData.prices.map(([_, price]) => price);
+    console.log(prices);
 
-    const isPriceUp = prices[prices.length - 1] >= prices[0];
-    const lineColor = isPriceUp ? '#22c55e' : '#ef4444'; // verde o rojo
-    const backgroundColor = isPriceUp
+
+    const lineColor = isPricePositive ? '#22c55e' : '#ef4444';
+    const backgroundColor = isPricePositive
         ? 'rgba(34, 197, 94, 0.2)'
         : 'rgba(239, 68, 68, 0.2)';
 
