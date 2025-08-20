@@ -35,12 +35,13 @@ function App() {
                 setCoins([]);
             })
             .finally(() => setLoader(false));
+    }, []);
 
-
+    useEffect(() => {
         if (!selectedCoin) return;
         fetchCoinHistory(selectedCoin)
             .then((data) => {
-                // console.log(`✅ Data of: ${selectedCoin}`, data);
+                console.log(`✅ Data of: ${selectedCoin}`, data);
                 setChartData(data);
             })
             .catch((error) => {
@@ -136,8 +137,11 @@ function App() {
                         </Box>
                     )}
 
-                    {chartData && (
-                        <Dashboard chartData={chartData} />
+                    {chartData && selectedCoinData && (
+                        <Dashboard
+                            chartData={chartData}
+                            isPricePositive={selectedCoinData.price_change_percentage_24h >= 0}
+                        />
                     )}
 
                     {coins && (
