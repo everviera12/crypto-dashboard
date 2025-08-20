@@ -11,7 +11,7 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import type { CoinPriceHistoryType } from '../types/coins.types';
-import Loader from './Loader';
+import Loader from './loaders/Loader';
 
 ChartJS.register(
     CategoryScale,

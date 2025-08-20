@@ -3,17 +3,19 @@ import './App.css'
 import { fetchCoins } from './tools/services/fetch.coins';
 import type { CoinPriceHistoryType, CoinType } from './tools/types/coins.types';
 import Component404 from './tools/components/Component404';
-import Loader from './tools/components/Loader';
+import Loader from './tools/components/loaders/Loader';
 import { fetchCoinHistory } from './tools/services/fetch.market_chart';
 import { Dashboard } from './tools/components/Dashboard';
 import TableCryptos from './tools/components/TableCryptos';
 import { Box, Card, CardContent, Typography } from '@mui/material';
+import ProgressBar from './tools/components/loaders/ProgressBar';
 
 function App() {
     const [coins, setCoins] = useState<CoinType[]>([]);
     const [chartData, setChartData] = useState<CoinPriceHistoryType>();
     const [loader, setLoader] = useState(true);
     const [selectedCoin, setSelectedCoin] = useState('bitcoin')
+    const [isChartLoading, setIsChartLoading] = useState(false);
 
     // const cacheCoinsPrice = useRef<Record<string, CoinPriceHistoryType>>({});
 
@@ -39,14 +41,17 @@ function App() {
 
     useEffect(() => {
         if (!selectedCoin) return;
+        setIsChartLoading(true);
         fetchCoinHistory(selectedCoin)
             .then((data) => {
-                console.log(`✅ Data of: ${selectedCoin}`, data);
                 setChartData(data);
             })
             .catch((error) => {
                 console.error(error);
                 setChartData(undefined);
+            })
+            .finally(() => {
+                setIsChartLoading(false);
             });
     }, [selectedCoin]);
 
@@ -137,12 +142,15 @@ function App() {
                         </Box>
                     )}
 
-                    {chartData && selectedCoinData && (
+                    {chartData && selectedCoinData && !isChartLoading ? (
                         <Dashboard
                             chartData={chartData}
                             isPricePositive={selectedCoinData.price_change_percentage_24h >= 0}
                         />
+                    ) : (
+                        <ProgressBar />
                     )}
+
 
                     {coins && (
                         <div className='py-16 overflow-y-auto'>
